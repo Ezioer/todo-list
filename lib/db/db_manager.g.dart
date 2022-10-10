@@ -13,12 +13,13 @@ class todo extends DataClass implements Insertable<todo> {
   final String des;
   final String createTime;
   final String createTimeYMD;
-  final String stopTime;
+  final int stopTime;
   final String notiTime;
   final int isMark;
   final int type;
   final int isMyDay;
   final int isFinish;
+
   todo(
       {required this.id,
       required this.title,
@@ -45,8 +46,7 @@ class todo extends DataClass implements Insertable<todo> {
           .mapFromDatabaseResponse(data['${effectivePrefix}create_time'])!,
       createTimeYMD: const StringType().mapFromDatabaseResponse(
           data['${effectivePrefix}create_time_y_m_d'])!,
-      stopTime: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}stop_time'])!,
+      stopTime: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}stop_time'])!,
       notiTime: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}noti_time'])!,
       isMark: const IntType()
@@ -67,7 +67,7 @@ class todo extends DataClass implements Insertable<todo> {
     map['des'] = Variable<String>(des);
     map['create_time'] = Variable<String>(createTime);
     map['create_time_y_m_d'] = Variable<String>(createTimeYMD);
-    map['stop_time'] = Variable<String>(stopTime);
+    map['stop_time'] = Variable<int>(stopTime);
     map['noti_time'] = Variable<String>(notiTime);
     map['is_mark'] = Variable<int>(isMark);
     map['type'] = Variable<int>(type);
@@ -101,7 +101,7 @@ class todo extends DataClass implements Insertable<todo> {
       des: serializer.fromJson<String>(json['des']),
       createTime: serializer.fromJson<String>(json['createTime']),
       createTimeYMD: serializer.fromJson<String>(json['createTimeYMD']),
-      stopTime: serializer.fromJson<String>(json['stopTime']),
+      stopTime: serializer.fromJson<int>(json['stopTime']),
       notiTime: serializer.fromJson<String>(json['notiTime']),
       isMark: serializer.fromJson<int>(json['isMark']),
       type: serializer.fromJson<int>(json['type']),
@@ -118,7 +118,7 @@ class todo extends DataClass implements Insertable<todo> {
       'des': serializer.toJson<String>(des),
       'createTime': serializer.toJson<String>(createTime),
       'createTimeYMD': serializer.toJson<String>(createTimeYMD),
-      'stopTime': serializer.toJson<String>(stopTime),
+      'stopTime': serializer.toJson<int>(stopTime),
       'notiTime': serializer.toJson<String>(notiTime),
       'isMark': serializer.toJson<int>(isMark),
       'type': serializer.toJson<int>(type),
@@ -128,17 +128,7 @@ class todo extends DataClass implements Insertable<todo> {
   }
 
   todo copyWith(
-          {int? id,
-          String? title,
-          String? des,
-          String? createTime,
-          String? createTimeYMD,
-          String? stopTime,
-          String? notiTime,
-          int? isMark,
-          int? type,
-          int? isMyDay,
-          int? isFinish}) =>
+          {int? id, String? title, String? des, String? createTime, String? createTimeYMD, int? stopTime, String? notiTime, int? isMark, int? type, int? isMyDay, int? isFinish}) =>
       todo(
         id: id ?? this.id,
         title: title ?? this.title,
@@ -196,12 +186,13 @@ class TodoTableCompanion extends UpdateCompanion<todo> {
   final Value<String> des;
   final Value<String> createTime;
   final Value<String> createTimeYMD;
-  final Value<String> stopTime;
+  final Value<int> stopTime;
   final Value<String> notiTime;
   final Value<int> isMark;
   final Value<int> type;
   final Value<int> isMyDay;
   final Value<int> isFinish;
+
   const TodoTableCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
@@ -221,7 +212,7 @@ class TodoTableCompanion extends UpdateCompanion<todo> {
     required String des,
     required String createTime,
     required String createTimeYMD,
-    required String stopTime,
+    required int stopTime,
     required String notiTime,
     required int isMark,
     required int type,
@@ -243,7 +234,7 @@ class TodoTableCompanion extends UpdateCompanion<todo> {
     Expression<String>? des,
     Expression<String>? createTime,
     Expression<String>? createTimeYMD,
-    Expression<String>? stopTime,
+    Expression<int>? stopTime,
     Expression<String>? notiTime,
     Expression<int>? isMark,
     Expression<int>? type,
@@ -271,7 +262,7 @@ class TodoTableCompanion extends UpdateCompanion<todo> {
       Value<String>? des,
       Value<String>? createTime,
       Value<String>? createTimeYMD,
-      Value<String>? stopTime,
+      Value<int>? stopTime,
       Value<String>? notiTime,
       Value<int>? isMark,
       Value<int>? type,
@@ -311,7 +302,7 @@ class TodoTableCompanion extends UpdateCompanion<todo> {
       map['create_time_y_m_d'] = Variable<String>(createTimeYMD.value);
     }
     if (stopTime.present) {
-      map['stop_time'] = Variable<String>(stopTime.value);
+      map['stop_time'] = Variable<int>(stopTime.value);
     }
     if (notiTime.present) {
       map['noti_time'] = Variable<String>(notiTime.value);
@@ -377,27 +368,18 @@ class $TodoTableTable extends TodoTable with TableInfo<$TodoTableTable, todo> {
   late final GeneratedColumn<String?> createTime = GeneratedColumn<String?>(
       'create_time', aliasedName, false,
       type: const StringType(), requiredDuringInsert: true);
-  final VerificationMeta _createTimeYMDMeta =
-      const VerificationMeta('createTimeYMD');
+  final VerificationMeta _createTimeYMDMeta = const VerificationMeta('createTimeYMD');
   @override
-  late final GeneratedColumn<String?> createTimeYMD = GeneratedColumn<String?>(
-      'create_time_y_m_d', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
+  late final GeneratedColumn<String?> createTimeYMD = GeneratedColumn<String?>('create_time_y_m_d', aliasedName, false, type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _stopTimeMeta = const VerificationMeta('stopTime');
   @override
-  late final GeneratedColumn<String?> stopTime = GeneratedColumn<String?>(
-      'stop_time', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
+  late final GeneratedColumn<int?> stopTime = GeneratedColumn<int?>('stop_time', aliasedName, false, type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _notiTimeMeta = const VerificationMeta('notiTime');
   @override
-  late final GeneratedColumn<String?> notiTime = GeneratedColumn<String?>(
-      'noti_time', aliasedName, false,
-      type: const StringType(), requiredDuringInsert: true);
+  late final GeneratedColumn<String?> notiTime = GeneratedColumn<String?>('noti_time', aliasedName, false, type: const StringType(), requiredDuringInsert: true);
   final VerificationMeta _isMarkMeta = const VerificationMeta('isMark');
   @override
-  late final GeneratedColumn<int?> isMark = GeneratedColumn<int?>(
-      'is_mark', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
+  late final GeneratedColumn<int?> isMark = GeneratedColumn<int?>('is_mark', aliasedName, false, type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
   late final GeneratedColumn<int?> type = GeneratedColumn<int?>(

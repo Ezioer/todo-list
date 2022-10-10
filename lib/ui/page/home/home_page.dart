@@ -156,14 +156,14 @@ class HomePage extends GetCommonView<HomeController> {
                                 width: 8.0,
                               ),
                               Expanded(
-                                child: Text("全部", style: TextStyle(fontWeight: FontWeight.w600)),
+                                child: Text("未完成", style: TextStyle(fontWeight: FontWeight.w600)),
                               ),
                               Text("${controller.systemList[3].count ==0 ? "" : controller.systemList[3].count}", style: TextStyle(fontWeight: FontWeight.w800)),
                             ],
                           ),
                         )),
                     InkWell(
-                        splashColor: ColorStyle.colorList[int.parse(controller.systemList[4].bgColor!)],
+                        splashColor: ColorStyle.colorList[int.parse(controller.systemList[4].bgColor)],
                         onTap: () {
                           Get.toNamed(Routes.listdetailPage, arguments: controller.systemList[4]);
                         },
@@ -203,6 +203,35 @@ class HomePage extends GetCommonView<HomeController> {
                               Icon(
                                 Icons.date_range,
                                 color: ColorStyle.iconColorList[int.parse(controller.systemList[5].bgColor)],
+                              ),
+                              SizedBox(
+                                width: 8.0,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  "已过期",
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              Text("", style: TextStyle(fontWeight: FontWeight.w800)),
+                            ],
+                          ),
+                        )),
+                    InkWell(
+                        splashColor: ColorStyle.colorList[int.parse(controller.systemList[6].bgColor)],
+                        onTap: () {
+                          Get.toNamed(Routes.listdetailPage, arguments: controller.systemList[6]);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(left: 10.0, right: 16.0),
+                          height: 48,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.date_range,
+                                color: ColorStyle.iconColorList[int.parse(controller.systemList[6].bgColor)],
                               ),
                               SizedBox(
                                 width: 8.0,

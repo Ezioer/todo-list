@@ -28,15 +28,15 @@ static const color_d9a40e = Color(0xffd9a40e);
 static const color_81776e = Color(0xff81776e);
 
  static List<Color> colorList = [
-   Color(0xff308a85),
-   Color(0xffffe4e9),
-   Color(0xffd4f1ef),
-   Color(0xffd65f5b),
-   Color(0xff5f73c1),
-   Color(0xffdfedf9),
-   Color(0xffd5f1e5),
-   Color(0xff815c94)
- ];
+    Color(0xff308a85),
+    Color(0xffffe4e9),
+    Color(0xffd4f1ef),
+    Color(0xffd65f5b),
+    Color(0xff5f73c1),
+    Color(0xffdfedf9),
+    Color(0xffd5f1e5),
+    Color(0xff815c94),
+  ];
 static List<Color> iconColorList = [
   Color(0xff308a85),
   Color(0xffeea2a4),

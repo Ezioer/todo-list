@@ -28,7 +28,6 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
 
   @override
   Widget build(BuildContext context) {
-
     // changeNavigatorColor(ColorStyle.colorList[int.parse(controller.defaultBg)]);
     return Scaffold(
       backgroundColor: ColorStyle.colorList[int.parse(controller.defaultBg)],
@@ -37,42 +36,45 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
           SliverAppBar(
             backgroundColor: ColorStyle.colorList[int.parse(controller.defaultBg)],
             actions: [
-              PopupMenuButton(
-                position: PopupMenuPosition.under,
-                padding: EdgeInsets.all(0),
-                icon: Icon(Icons.sort),
-                itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                  PopupMenuItem(
-                    child: ListTile(
-                      leading: Icon(Icons.sort),
-                      title: Text('时间升序'),
-                      onTap: () {
-                        controller.sortList(1);
-                        Navigator.pop(context);
-                      },
+              Visibility(
+                child: PopupMenuButton(
+                  position: PopupMenuPosition.under,
+                  padding: EdgeInsets.all(0),
+                  icon: Icon(Icons.sort),
+                  itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                    PopupMenuItem(
+                      child: ListTile(
+                        leading: Icon(Icons.sort),
+                        title: Text('时间升序'),
+                        onTap: () {
+                          controller.sortList(1);
+                          Navigator.pop(context);
+                        },
+                      ),
                     ),
-                  ),
-                  PopupMenuItem(
-                    child: ListTile(
-                      onTap: () {
-                        controller.sortList(2);
-                        Navigator.pop(context);
-                      },
-                      leading: Icon(Icons.sort),
-                      title: Text('时间降序'),
+                    PopupMenuItem(
+                      child: ListTile(
+                        onTap: () {
+                          controller.sortList(2);
+                          Navigator.pop(context);
+                        },
+                        leading: Icon(Icons.sort),
+                        title: Text('时间降序'),
+                      ),
                     ),
-                  ),
-                  PopupMenuItem(
-                    child: ListTile(
-                      onTap: () {
-                        controller.sortList(3);
-                        Navigator.pop(context);
-                      },
-                      leading: Icon(Icons.star),
-                      title: Text('重要性优先'),
+                    PopupMenuItem(
+                      child: ListTile(
+                        onTap: () {
+                          controller.sortList(3);
+                          Navigator.pop(context);
+                        },
+                        leading: Icon(Icons.star),
+                        title: Text('重要性优先'),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+                visible: controller.typeEntity.id == 7 ? false : true,
               ),
 
               /*IconButton(
@@ -99,7 +101,29 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
                                     ),
                                     padding: EdgeInsets.all(10),
                                   ),
-                                  ListView.builder(
+                                  ConstrainedBox(
+                                    constraints: BoxConstraints(maxHeight: 300),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: List.generate(
+                                            ColorStyle.colorList.length,
+                                            (index) => InkWell(
+                                                  onTap: () {
+                                                    controller.changeBg(index);
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Container(
+                                                    child: ListTile(
+                                                      title: Text(""),
+                                                    ),
+                                                    margin: EdgeInsets.only(top: 2),
+                                                    decoration: BoxDecoration(color: ColorStyle.colorList[index], borderRadius: BorderRadius.circular(20)),
+                                                  ),
+                                                )),
+                                      ),
+                                    ),
+                                  )
+                                  /*ListView.builder(
                                     shrinkWrap: true,
                                     itemCount: ColorStyle.colorList.length,
                                     itemBuilder: (BuildContext context, int index) {
@@ -109,24 +133,24 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
                                           Navigator.pop(context);
                                         },
                                         child: Container(
+                                          child: SizedBox(height: 40,),
                                           margin: EdgeInsets.only(top: 2),
-                                          width: 40,
-                                          height: 30,
                                           decoration: BoxDecoration(color: ColorStyle.colorList[index], borderRadius: BorderRadius.circular(20)),
                                         ),
                                       );
                                     },
-                                  )
+                                  )*/
                                 ],
                               ),
                             ],
                           );
                         });
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.color_lens,
                   )),
               Visibility(
+                  visible: controller.typeEntity.type == 1 ? false : true,
                   child: PopupMenuButton(
                     position: PopupMenuPosition.under,
                     padding: EdgeInsets.all(4),
@@ -155,8 +179,7 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
                         ),
                       ),
                     ],
-                  ),
-                  visible: controller.typeEntity.type == 1 ? false : true),
+                  )),
             ],
             centerTitle: true,
             elevation: 0,
@@ -186,7 +209,7 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
             ),
           )),
           SliverVisibility(
-            visible: controller.typeEntity.id == 6 ? false : true,
+            visible: controller.typeEntity.id == 7 ? false : true,
             sliver: GetBuilder<ListDetailController>(
                 builder: (_) => SliverList(
                         delegate: SliverChildBuilderDelegate(childCount: controller.todoList.length, (BuildContext context, int index) {
@@ -195,12 +218,12 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
           ),
           SliverToBoxAdapter(
               child: Visibility(
-                  visible: (controller.todoList.isNotEmpty || controller.typeEntity.id == 6) ? false : true,
+                  visible: (controller.todoList.isNotEmpty || controller.typeEntity.id == 7) ? false : true,
                   child: Container(
                       margin: EdgeInsets.only(top: 100, left: 50, right: 50),
                       child: Column(
                         children: [
-                          Lottie.asset(getLottie(controller.typeEntity.id!), width: 200, height: 200, animate: true,repeat: false),
+                          Lottie.asset(getLottie(controller.typeEntity.id!), width: 200, height: 200, animate: true, repeat: false),
                           SizedBox(
                             height: 20,
                           ),
@@ -212,12 +235,12 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
                       )))),
           SliverToBoxAdapter(
             child: Visibility(
-                visible: controller.typeEntity.id == 6 ? true : false,
+                visible: controller.typeEntity.id == 7 ? true : false,
                 child: Container(
                   padding: EdgeInsets.only(left: 10, right: 10),
                   child: TableCalendar(
                     locale: 'zh_CN',
-                    eventLoader: _getEventsForDay,
+                    eventLoader: controller.getEventsForDay,
                     selectedDayPredicate: (day) {
                       return isSameDay(controller.selectedDay, day);
                     },
@@ -225,6 +248,69 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
                       controller.selectedDay = selectedDay;
                       controller.focusedDay = focusedDay; // update `_focusedDay` here as well
                       controller.update();
+                      if (controller.groupResult["${selectedDay.year}-${selectedDay.month}-${selectedDay.day}"]! == null) {
+                        return;
+                      }
+                      showModalBottomSheet(
+                          context: context,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+                          builder: (context) {
+                            return Wrap(
+                              children: [
+                                Column(
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                        "任务列表",
+                                        style: TextStyle(fontWeight: FontWeight.w600),
+                                      ),
+                                      padding: EdgeInsets.all(10),
+                                    ),
+                                    ConstrainedBox(
+                                        constraints: BoxConstraints(maxHeight: 300),
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            children: List.generate(
+                                                controller.groupResult["${selectedDay.year}-${selectedDay.month}-${selectedDay.day}"]!.length,
+                                                (index) => InkWell(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
+                                                        Get.toNamed(Routes.commondetail,
+                                                            arguments: controller.groupResult["${selectedDay.year}-${selectedDay.month}-${selectedDay.day}"]![index]!);
+                                                      },
+                                                      child: Container(
+                                                        child: ListTile(
+                                                            title: Text(controller.groupResult["${selectedDay.year}-${selectedDay.month}-${selectedDay.day}"]![index]!.title!)),
+                                                        margin: EdgeInsets.only(top: 2),
+                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                                                      ),
+                                                    )),
+                                          ),
+                                        ))
+
+                                    /*ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: controller.groupResult["${selectedDay.year}-${selectedDay.month}-${selectedDay.day}"]!.length,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        return InkWell(
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            Get.toNamed(Routes.commondetail,
+                                                arguments: controller.groupResult["${selectedDay.year}-${selectedDay.month}-${selectedDay.day}"]![index]!);
+                                          },
+                                          child: Container(
+                                            child: ListTile(title: Text(controller.groupResult["${selectedDay.year}-${selectedDay.month}-${selectedDay.day}"]![index]!.title!)),
+                                            margin: EdgeInsets.only(top: 2),
+                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                                          ),
+                                        );
+                                      },
+                                    )*/
+                                  ],
+                                ),
+                              ],
+                            );
+                          });
                     },
                     startingDayOfWeek: StartingDayOfWeek.monday,
                     calendarBuilders: CalendarBuilders(
@@ -247,7 +333,7 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
         ],
       ),
       floatingActionButton: Visibility(
-          visible: (controller.typeEntity.id == 5 || controller.typeEntity.id == 6) ? false : true,
+          visible: (controller.typeEntity.id == 5 || controller.typeEntity.id == 6 || controller.typeEntity.id == 7) ? false : true,
           child: FloatingActionButton(
             onPressed: () {
               showModalBottomSheet(
@@ -277,10 +363,10 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
                                           title: controller.textController.text,
                                           des: "",
                                           createTime: DateTime.now().millisecondsSinceEpoch.toString(),
-                                          createTimeYMD: "${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}",
+                                          createTimeYMD: "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}",
                                           stopTime: controller.stopTime,
                                           notiTime: controller.notiTime,
-                                          isMark: 0,
+                                          isMark: controller.typeEntity.id == 2 ? 1 : 0,
                                           type: controller.typeEntity.id,
                                           isMyDay: controller.typeEntity.id == 1 ? 1 : 0,
                                           isFinish: 0);
@@ -291,7 +377,7 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
                                         entity.id = result;
                                         controller.todoList.add(entity);
                                         controller.update();
-                                        Get.find<HomeController>().updateCount(controller.typeEntity, 1, 0, 0);
+                                        Get.find<HomeController>().updateCount(controller.typeEntity, 1, 0, 0, entity.type!);
                                         Navigator.pop(context);
                                       }
                                     },
@@ -362,7 +448,7 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
                                                     );
                                                     if (newDate != null) {
                                                       controller.dateTime = newDate;
-                                                      controller.stopTime = newDate.add(Duration(days: 1)).millisecondsSinceEpoch.toString();
+                                                      controller.stopTime = newDate.add(Duration(days: 1)).millisecondsSinceEpoch;
                                                       controller.changeIsDelete(1, "${newDate.year}-${newDate.month}-${newDate.day} 到期");
                                                       Navigator.pop(context);
                                                     }
@@ -431,7 +517,7 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
                                                       context: context,
                                                       initialDate: DateTime.now(),
                                                       firstDate: DateTime(2017, 1),
-                                                      lastDate: DateTime(2025, 7),
+                                                      lastDate: DateTime(2030, 7),
                                                       helpText: '选择日期',
                                                     );
                                                     if (newDate != null) {
@@ -521,7 +607,7 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
   }
 
   String getLottie(int type) {
-    if(type > 6) {
+    if (type > 7) {
       return R.assetsLottieEmpty;
     }
     if (type == 1) {
@@ -534,6 +620,8 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
       return R.assetsLottieAll;
     } else if (type == 5) {
       return R.assetsLottieDone;
+    } else if (type == 6) {
+      return R.assetsLottieEmpty;
     } else {
       return "";
     }
@@ -550,6 +638,8 @@ class ListDetailPage extends GetCommonView<ListDetailController> {
       return "所有未完成的任务都在这里";
     } else if (type == 5) {
       return "所有已完成的任务都在这里";
+    } else if (type == 6) {
+      return "所有已过期的任务都在这里";
     } else {
       return "";
     }
@@ -576,7 +666,7 @@ class _MyListItem extends StatelessWidget {
         dismissible: DismissiblePane(
           onDismissed: () {
             MyDatabase.getInstance()!.deleteTodo(data.id!);
-            Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 4, data.isFinish!, data.isMark!);
+            Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 4, data.isFinish!, data.isMark!, data.type!);
           },
         ),
 
@@ -593,7 +683,7 @@ class _MyListItem extends StatelessWidget {
               Slidable.of(context)?.dismiss(ResizeRequest(Duration(milliseconds: 800), () {
                 MyDatabase.getInstance()!.deleteTodo(data.id!);
                 Get.find<ListDetailController>().todoList.remove(data);
-                Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 4, data.isFinish!, data.isMark!);
+                Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 4, data.isFinish!, data.isMark!, data.type!);
                 Get.find<ListDetailController>().update();
               }));
             },
@@ -621,7 +711,7 @@ class _MyListItem extends StatelessWidget {
                         data.isFinish = 1;
                       }
                       Get.find<ListDetailController>().updateTaskStatus(data);
-                      Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 2, data.isFinish!, 0);
+                      Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 2, data.isFinish!, 0, data.type!);
                       Get.find<ListDetailController>().update();
                     },
                     value: data.isFinish == 1,
@@ -644,7 +734,7 @@ class _MyListItem extends StatelessWidget {
                               ),
                               visible: data.stopTime == "0" ? false : true),
                           Text(
-                            "${DateUtil.getTimeNoti(int.parse(data.stopTime!))}",
+                            "${DateUtil.getTimeNoti(data.stopTime!)}",
                             style: TextStyle(
                               fontSize: 10,
                             ),
@@ -670,7 +760,7 @@ class _MyListItem extends StatelessWidget {
                         data.isMark = 1;
                       }
                       Get.find<ListDetailController>().updateTaskStatus(data);
-                      Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 3, data.isMark!, 0);
+                      Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 3, data.isMark!, 0, data.type!);
                       Get.find<ListDetailController>().update();
                     },
                     icon: Icon(data.isMark == 1 ? Icons.star : Icons.star_border),
@@ -683,6 +773,7 @@ class _MyListItem extends StatelessWidget {
     );
   }
 }
+/*
 
 List<Event> _getEventsForDay(DateTime day) {
   // Implementation example
@@ -703,16 +794,18 @@ final kEvents = LinkedHashMap<DateTime, List<Event>>(
   hashCode: getHashCode,
 )..addAll(_kEventSource);
 
-final _kEventSource = Map.fromIterable(List.generate(50, (index) => index),
+final _kEventSource = Map.fromIterable(List.generate(2, (index) => index),
     key: (item) => DateTime.utc(kFirstDay.year, kFirstDay.month, item * 5),
     value: (item) => List.generate(
-        item % 4 + 1, (index) => Event('Event $item | ${index + 1}')))
-  ..addAll({
+        item % 4 + 1, (index) => Event('Event $item | ${index + 1}')));
+  */
+/*..addAll({
     kToday: [
       Event('Today\'s Event 1'),
       Event('Today\'s Event 2'),
     ],
-  });
+  });*/ /*
+
 
 int getHashCode(DateTime key) {
   return key.day * 1000000 + key.month * 10000 + key.year;
@@ -720,4 +813,4 @@ int getHashCode(DateTime key) {
 final kToday = DateTime.now();
 final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
 final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
-
+*/

@@ -17,9 +17,23 @@ class RequestRepository {
     if (success != null) {
       if (type == 1) {
         List<todolist> list = await MyDatabase?.getInstance()!.getSystemList();
+        List<todo> listToday = await MyDatabase?.getInstance()!.findToDay();
         List<TodoListEntity> dataList = [];
         for (todolist item in list) {
-          dataList.add(TodoListEntity(id: item.id, title: item.title, des: item.des, createTime: item.createTime, bgColor: item.bgColor, sortType: item.sortType, type: item.type,count: item.count));
+          if (item.id == 1) {
+            dataList.add(TodoListEntity(
+                id: item.id,
+                title: item.title,
+                des: item.des,
+                createTime: item.createTime,
+                bgColor: item.bgColor,
+                sortType: item.sortType,
+                type: item.type,
+                count: listToday.length));
+          } else {
+            dataList.add(TodoListEntity(
+                id: item.id, title: item.title, des: item.des, createTime: item.createTime, bgColor: item.bgColor, sortType: item.sortType, type: item.type, count: item.count));
+          }
         }
         success(dataList, true);
       } else {
@@ -46,15 +60,29 @@ class RequestRepository {
         list = await MyDatabase?.getInstance()!.findAllWork();
       } else if (type == 2) {
         list = await MyDatabase?.getInstance()!.findAllImportant();
-      } else if(type == 1){
+      } else if (type == 1) {
         list = await MyDatabase?.getInstance()!.findToDay();
+      } else if (type == 6) {
+        list = await MyDatabase?.getInstance()!.findAllExpire();
+      } else if (type == 7) {
+        list = await MyDatabase?.getInstance()!.findAllTodo();
       } else {
         list = await MyDatabase?.getInstance()!.findTodo(type);
       }
       List<TodoEntity> todoEntity = [];
       for (todo d in list) {
         todoEntity.add(TodoEntity(
-            id: d.id, title: d.title, des: d.des, createTime: d.createTime, stopTime: d.stopTime, notiTime:d.notiTime,type: d.type, isMark: d.isMark, isMyDay: d.isMyDay, isFinish: d.isFinish));
+            id: d.id,
+            title: d.title,
+            des: d.des,
+            createTime: d.createTime,
+            createTimeYMD: d.createTimeYMD,
+            stopTime: d.stopTime,
+            notiTime: d.notiTime,
+            type: d.type,
+            isMark: d.isMark,
+            isMyDay: d.isMyDay,
+            isFinish: d.isFinish));
       }
       success(todoEntity, true);
     }

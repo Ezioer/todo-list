@@ -28,7 +28,7 @@ class TodoDetailController extends BaseGetPageController {
 
   void changeIsDelete(int value, String text) {
     if(value == 0) {
-      data.stopTime = "0";
+      data.stopTime = 0;
     }
     isDeleteStopTime = value;
     stopValue = text;

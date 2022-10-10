@@ -19,8 +19,9 @@ class AddListController extends BaseGetPageController {
   TodoListEntity typeEntity = TodoListEntity(id: 0, title: "", des: "", createTime: "", bgColor: "0", sortType: 1, type: 2, count: 0);
   List<TodoEntity> todoList = [];
   String defaultBg = "0";
-  String stopTime = "0";
+  int stopTime = 0;
   String notiTime = "0";
+
   ///输入框文本控制器
   TextEditingController textController = TextEditingController(text: "");
   TextEditingController titleController = TextEditingController(text: "");
@@ -72,7 +73,7 @@ class AddListController extends BaseGetPageController {
 
   void changeIsDelete(int value, String text) {
     if(value == 0) {
-      stopTime = "0";
+      stopTime = 0;
     }
     isDeleteStopTime = value;
     stopValue = text;
@@ -93,16 +94,13 @@ class AddListController extends BaseGetPageController {
   }
 
   void addDiyList() async {
-    int id = await MyDatabase.getInstance()!.insertDiyList(todolist(
-        id: 0,
-        title: titleController.text,
-        des: desController.text,
-        createTime: DateTime.now().microsecond.toString(),
-        bgColor: typeEntity.bgColor,
-        sortType: typeEntity.sortType!,
-        type: 2,
-        count: 0));
+    String times = DateTime.now().microsecond.toString();
+    int id = await MyDatabase.getInstance()!.insertDiyList(
+        todolist(id: 0, title: titleController.text, des: desController.text, createTime: times, bgColor: typeEntity.bgColor, sortType: typeEntity.sortType!, type: 2, count: 0));
     typeEntity.id = id;
+    typeEntity.title = titleController.text;
+    typeEntity.des = desController.text;
+    typeEntity.createTime = times;
     updateHome();
     update();
   }

@@ -33,7 +33,6 @@ class AutoDisposeState<S extends GetxController> extends State<GetCommonView> {
 
   @override
   Widget build(BuildContext context) {
-    changeNavigatorColor(Colors.transparent);
     return GetBuilder<S>(
         id: widget.updateId,
         builder: (controller) {

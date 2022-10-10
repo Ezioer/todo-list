@@ -29,22 +29,51 @@ class MyDatabase extends _$MyDatabase {
     if (single.isNotEmpty) {
       return -1;
     } else {
-     int id =await  into(todoTable).insert(TodoTableCompanion(
-          title: Value(entity.title!), des: Value(entity.des!), createTime: Value(entity.createTime!), createTimeYMD:Value(entity.createTimeYMD!),stopTime: Value(entity.stopTime!), notiTime:Value(entity.notiTime!),type: Value(entity.type!), isMark: Value(entity.isMark!), isMyDay: Value(entity.isMyDay!), isFinish: Value(entity.isFinish!)));
+      int id = await into(todoTable).insert(TodoTableCompanion(
+          title: Value(entity.title!),
+          des: Value(entity.des!),
+          createTime: Value(entity.createTime!),
+          createTimeYMD: Value(entity.createTimeYMD!),
+          stopTime: Value(entity.stopTime!),
+          notiTime: Value(entity.notiTime!),
+          type: Value(entity.type!),
+          isMark: Value(entity.isMark!),
+          isMyDay: Value(entity.isMyDay!),
+          isFinish: Value(entity.isFinish!)));
       return id;
     }
   }
 
   void updateTodo(TodoEntity entity) async {
-    await update(todoTable).replace(todo(id: entity.id!, title: entity.title!, des: entity.des!, createTime: entity.createTime!, createTimeYMD:entity.createTimeYMD!,stopTime: entity.stopTime!, notiTime:entity.notiTime!,isMark: entity.isMark!, type: entity.type!, isMyDay: entity.isMyDay!, isFinish: entity.isFinish!));
+    await update(todoTable).replace(todo(
+        id: entity.id!,
+        title: entity.title!,
+        des: entity.des!,
+        createTime: entity.createTime!,
+        createTimeYMD: entity.createTimeYMD!,
+        stopTime: entity.stopTime!,
+        notiTime: entity.notiTime!,
+        isMark: entity.isMark!,
+        type: entity.type!,
+        isMyDay: entity.isMyDay!,
+        isFinish: entity.isFinish!));
   }
 
   void updateToListBg(TodoListEntity entity, String bg) async {
-    await update(todoListTable).replace(todolist(id: entity.id!, title: entity.title!, des: entity.des!, createTime: entity.createTime!, bgColor: bg, sortType: entity.sortType!, type: entity.type!,count: entity.count));
+    await update(todoListTable).replace(todolist(
+        id: entity.id!, title: entity.title!, des: entity.des!, createTime: entity.createTime!, bgColor: bg, sortType: entity.sortType!, type: entity.type!, count: entity.count));
   }
 
   void updateToListCount(TodoListEntity entity) async {
-    await update(todoListTable).replace(todolist(id: entity.id!, title: entity.title!, des: entity.des!, createTime: entity.createTime!, bgColor: entity.bgColor, sortType: entity.sortType!, type: entity.type!,count: entity.count));
+    await update(todoListTable).replace(todolist(
+        id: entity.id!,
+        title: entity.title!,
+        des: entity.des!,
+        createTime: entity.createTime!,
+        bgColor: entity.bgColor,
+        sortType: entity.sortType!,
+        type: entity.type!,
+        count: entity.count));
   }
 
   void deleteTodo(int entity) async {
@@ -57,6 +86,17 @@ class MyDatabase extends _$MyDatabase {
 
   Future<List<todo>> findTodo(int type) {
     Future<List<todo>> list = (select(todoTable)..where((tbl) => tbl.type.equals(type))).get();
+    return list;
+  }
+
+  Future<List<todo>> findAllExpire() {
+    DateTime dateTime = DateTime.now();
+    Future<List<todo>> list = (select(todoTable)..where((tbl) => tbl.stopTime.isSmallerOrEqualValue(dateTime.millisecondsSinceEpoch))).get();
+    return list;
+  }
+
+  Future<List<todo>> findAllTodo() {
+    Future<List<todo>> list = (select(todoTable)).get();
     return list;
   }
 
@@ -82,8 +122,8 @@ class MyDatabase extends _$MyDatabase {
 
   Future<List<todo>> findToDay() {
     DateTime date = DateTime.now();
-    String result = "${date.year}${date.month}${date.day}";
-    Future<List<todo>> list = (select(todoTable)..where((tbl) => tbl.createTimeYMD.equals(result))).get();
+    String result = "${date.year}-${date.month}-${date.day}";
+    Future<List<todo>> list = (select(todoTable)..where((tbl) => tbl.createTimeYMD.equals(result) & tbl.type.equals(1))).get();
     return list;
   }
 
@@ -102,8 +142,14 @@ class MyDatabase extends _$MyDatabase {
     if (single.isNotEmpty) {
       return -1;
     } else {
-      int id =await  into(todoListTable).insert(TodoListTableCompanion(title: Value(data.title),des: Value(data.des),createTime: Value(data.createTime),bgColor: Value(data.bgColor)
-      ,sortType: Value(data.sortType),type: Value(2),count: Value(data.count)));
+      int id = await into(todoListTable).insert(TodoListTableCompanion(
+          title: Value(data.title),
+          des: Value(data.des),
+          createTime: Value(data.createTime),
+          bgColor: Value(data.bgColor),
+          sortType: Value(data.sortType),
+          type: Value(2),
+          count: Value(data.count)));
       return id;
     }
   }
@@ -113,7 +159,14 @@ class MyDatabase extends _$MyDatabase {
   }
 
   Future<int> saveOneList(TodoListEntity entity) async {
-    into(todoListTable).insert(TodoListTableCompanion(title: Value(entity.title!), des: Value(entity.des!), createTime: Value(entity.createTime!), bgColor: Value(entity.bgColor!), sortType: Value(entity.sortType!), type: Value(entity.type!),count: Value(entity.count)));
+    into(todoListTable).insert(TodoListTableCompanion(
+        title: Value(entity.title!),
+        des: Value(entity.des!),
+        createTime: Value(entity.createTime!),
+        bgColor: Value(entity.bgColor!),
+        sortType: Value(entity.sortType!),
+        type: Value(entity.type!),
+        count: Value(entity.count)));
     return 1;
   }
 }

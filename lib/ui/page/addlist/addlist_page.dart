@@ -265,7 +265,7 @@ class AddListPage extends GetCommonView<AddListController> {
                                       title: controller.textController.text,
                                       des: "",
                                       createTime: DateTime.now().millisecondsSinceEpoch.toString(),
-                                      createTimeYMD: "${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}",
+                                      createTimeYMD: "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}",
                                       stopTime: controller.stopTime,
                                       notiTime: controller.notiTime,
                                       isMark: 0,
@@ -279,7 +279,7 @@ class AddListPage extends GetCommonView<AddListController> {
                                     entity.id = result;
                                     controller.todoList.add(entity);
                                     controller.update();
-                                    Get.find<HomeController>().updateCount(controller.typeEntity, 1, 0,0);
+                                    Get.find<HomeController>().updateCount(controller.typeEntity, 1, 0, 0, entity.type!);
                                     Navigator.pop(context);
                                   }
                                 },
@@ -350,7 +350,7 @@ class AddListPage extends GetCommonView<AddListController> {
                                                 );
                                                 if (newDate != null) {
                                                   controller.dateTime = newDate;
-                                                  controller.stopTime = newDate.add(Duration(days: 1)).millisecondsSinceEpoch.toString();
+                                                  controller.stopTime = newDate.add(Duration(days: 1)).millisecondsSinceEpoch;
                                                   controller.changeIsDelete(1, "${newDate.year}-${newDate.month}-${newDate.day} 到期");
                                                   Navigator.pop(context);
                                                 }
@@ -523,7 +523,7 @@ class _MyListItem extends StatelessWidget {
         dismissible: DismissiblePane(
           onDismissed: () {
             MyDatabase.getInstance()!.deleteTodo(data.id!);
-            Get.find<HomeController>().updateCount( Get.find<ListDetailController>().typeEntity, 4, data.isFinish!,data.isMark!);
+            Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 4, data.isFinish!, data.isMark!, data.type!);
           },
         ),
 
@@ -540,7 +540,7 @@ class _MyListItem extends StatelessWidget {
               Slidable.of(context)?.dismiss(ResizeRequest(Duration(milliseconds: 800), () {
                 MyDatabase.getInstance()!.deleteTodo(data.id!);
                 Get.find<ListDetailController>().todoList.remove(data);
-                Get.find<HomeController>().updateCount( Get.find<ListDetailController>().typeEntity, 4, data.isFinish!,data.isMark!);
+                Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 4, data.isFinish!, data.isMark!, data.type!);
                 Get.find<ListDetailController>().update();
               }));
             },
@@ -568,7 +568,7 @@ class _MyListItem extends StatelessWidget {
                         data.isFinish = 1;
                       }
                       Get.find<ListDetailController>().updateTaskStatus(data);
-                      Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 2, data.isFinish!,0);
+                      Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 2, data.isFinish!, 0, data.type!);
                       Get.find<ListDetailController>().update();
                     },
                     value: data.isFinish == 1,
@@ -586,7 +586,7 @@ class _MyListItem extends StatelessWidget {
                         children: [
                           Visibility(child: Icon(Icons.date_range,size: 14,),visible: data.stopTime == "0" ? false : true) ,
                           Text(
-                            "${DateUtil.getTimeNoti(int.parse(data.stopTime!))}",
+                            "${DateUtil.getTimeNoti(data.stopTime!)}",
                             style: TextStyle(fontSize: 11),
                           ),
                           SizedBox(width: 12,),
@@ -603,7 +603,7 @@ class _MyListItem extends StatelessWidget {
                         data.isMark = 1;
                       }
                       Get.find<ListDetailController>().updateTaskStatus(data);
-                      Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 3, data.isMark!,0);
+                      Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 3, data.isMark!, 0, data.type!);
                       Get.find<ListDetailController>().update();
                     },
                     icon: Icon(data.isMark == 1 ? Icons.star : Icons.star_border),

@@ -10,14 +10,15 @@ class TodoEntity {
   String? des;
   String? createTime;
   String? createTimeYMD;
-  String stopTime = "0";
+  int stopTime = 0;
   String notiTime = "0";
   int? type;
   int? isMark;
   int? isMyDay;
   int? isFinish;
 
-  TodoEntity({this.id, this.title, this.des, this.createTime,this.createTimeYMD,required this.stopTime,required this.notiTime,this.type,this.isMark,this.isMyDay,this.isFinish});
+  TodoEntity(
+      {this.id, this.title, this.des, this.createTime, this.createTimeYMD, required this.stopTime, required this.notiTime, this.type, this.isMark, this.isMyDay, this.isFinish});
 
   TodoEntity.fromJson(dynamic json) {
     id = json['id'];

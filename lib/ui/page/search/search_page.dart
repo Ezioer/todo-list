@@ -104,7 +104,7 @@ class _MyListItem extends StatelessWidget {
                       data.isFinish = 1;
                     }
                     Get.find<ListDetailController>().updateTaskStatus(data);
-                    Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 2, data.isFinish!, 0);
+                    Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 2, data.isFinish!, 0, data.type!);
                     Get.find<ListDetailController>().update();
                   },
                   value: data.isFinish == 1,
@@ -127,7 +127,7 @@ class _MyListItem extends StatelessWidget {
                             ),
                             visible: data.stopTime == "0" ? false : true),
                         Text(
-                          "${DateUtil.getTimeNoti(int.parse(data.stopTime!))}",
+                          "${DateUtil.getTimeNoti(data.stopTime!)}",
                           style: TextStyle(fontSize: 11),
                         ),
                         SizedBox(
@@ -151,7 +151,7 @@ class _MyListItem extends StatelessWidget {
                       data.isMark = 1;
                     }
                     Get.find<ListDetailController>().updateTaskStatus(data);
-                    Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 3, data.isMark!, 0);
+                    Get.find<HomeController>().updateCount(Get.find<ListDetailController>().typeEntity, 3, data.isMark!, 0, data.type!);
                     Get.find<ListDetailController>().update();
                   },
                   icon: Icon(data.isMark == 1 ? Icons.star : Icons.star_border),

@@ -21,13 +21,13 @@ class DateUtil {
     return "";
   }
 
-  static String getDayLast(int day) {
+  static int getDayLast(int day) {
     DateTime now = DateTime.now();
-    if(day == 7) {
+    if (day == 7) {
       day = 14 - now.weekday;
     }
-    DateTime dateTime = DateTime(now.year,now.month,now.day,0,0,0,0,0).add(Duration(days: day));
-    return dateTime.millisecondsSinceEpoch.toString();
+    DateTime dateTime = DateTime(now.year, now.month, now.day, 0, 0, 0, 0, 0).add(Duration(days: day));
+    return dateTime.millisecondsSinceEpoch;
   }
 
   static String getNotiLast(int day) {
@@ -49,6 +49,7 @@ class DateUtil {
 
 
   static String getTimeNoti(int time) {
+    // int times = int.parse(time);
     if(time == 0) {
       return "";
     }

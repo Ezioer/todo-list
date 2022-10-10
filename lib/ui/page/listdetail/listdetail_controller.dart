@@ -1,5 +1,7 @@
+import 'dart:collection';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:todos/db/db_manager.dart';
 import 'package:todos/db/model/todo_entity.dart';
 import 'package:todos/ui/page/home/home_controller.dart';
@@ -19,14 +21,19 @@ class ListDetailController extends BaseGetPageController {
   TodoListEntity typeEntity = Get.arguments;
   List<TodoEntity> todoList = [];
   String defaultBg = "0";
-  String stopTime = "0";
+  int stopTime = 0;
   String notiTime = "0";
   DateTime? selectedDay;
   DateTime? focusedDay;
+  Map<DateTime, List<Event>> kEventSource = {};
+  Map kEvents = {};
+  Map<String?, List<TodoEntity>> groupResult = {};
+
   ///输入框文本控制器
   TextEditingController textController = TextEditingController(text: "");
   TextEditingController titleController = TextEditingController(text: "");
   TextEditingController desController = TextEditingController(text: "");
+
   @override
   void onInit() {
     super.onInit();
@@ -40,6 +47,20 @@ class ListDetailController extends BaseGetPageController {
         todoList.clear();
       }
       todoList.addAll(data);
+      if (type == 7) {
+        ///日历视图需要处理数据，使用map管理，key为日期，value为当前日期下所有任务list
+        groupResult = groupBy(todoList, (TodoEntity item) => item.createTimeYMD);
+        for (var item in groupResult.entries) {
+          // DateTime time = DateTime.fromMillisecondsSinceEpoch(int.parse(item.!));
+          var result = item.key!.split("-");
+          kEventSource[DateTime.utc(int.parse(result[0]), int.parse(result[1]), int.parse(result[2]))] =
+              List.generate(item.value.length, (index) => Event(item.value[index].title!, item.value[index].id!));
+        }
+        kEvents = LinkedHashMap<DateTime, List<Event>>(
+          equals: isSameDay,
+          hashCode: getHashCode,
+        )..addAll(kEventSource);
+      }
       showSuccess(todoList);
       update();
     }, fail: (code, msg) {
@@ -49,10 +70,10 @@ class ListDetailController extends BaseGetPageController {
 
   void sortList(int type) {
     //1 默认时间升序 2 时间降序 3重要性优先
-    if (type ==1) {
-      todoList.sort((a,b) =>int.parse(a.createTime!).compareTo(int.parse(b.createTime!)));
-    } else if(type == 2) {
-      todoList.sort((a,b) =>int.parse(a.createTime!).compareTo(int.parse(b.createTime!)));
+    if (type == 1) {
+      todoList.sort((a, b) => int.parse(a.createTime!).compareTo(int.parse(b.createTime!)));
+    } else if (type == 2) {
+      todoList.sort((a, b) => int.parse(a.createTime!).compareTo(int.parse(b.createTime!)));
       todoList = todoList.reversed.toList();
     } else {
       var results = groupBy(todoList, (TodoEntity item) => item.isMark);
@@ -69,7 +90,7 @@ class ListDetailController extends BaseGetPageController {
         id: typeEntity.id!,
         title: titleController.text,
         des: desController.text,
-        createTime:typeEntity.createTime!,
+        createTime: typeEntity.createTime!,
         bgColor: typeEntity.bgColor,
         sortType: typeEntity.sortType!,
         type: 2,
@@ -82,14 +103,14 @@ class ListDetailController extends BaseGetPageController {
 
   void changeBg(int index) {
     defaultBg = "${index}";
-    MyDatabase.getInstance()?.updateToListBg(typeEntity,defaultBg);
+    MyDatabase.getInstance()?.updateToListBg(typeEntity, defaultBg);
     Get.find<HomeController>().getSystemFromDatabase(typeEntity.type!);
     update();
   }
 
   void changeIsDelete(int value, String text) {
-    if(value == 0) {
-      stopTime=  "0";
+    if (value == 0) {
+      stopTime = 0;
     }
     isDeleteStopTime = value;
     stopValue = text;
@@ -97,7 +118,7 @@ class ListDetailController extends BaseGetPageController {
   }
 
   void changeIsNoti(int value, String text) {
-    if(value == 0) {
+    if (value == 0) {
       notiTime = "0";
     }
     isDeleteNoti = value;
@@ -112,4 +133,34 @@ class ListDetailController extends BaseGetPageController {
   void updateHome() async {
     Get.find<HomeController>().getSystemFromDatabase(2);
   }
+
+  List<Event> getEventsForDay(DateTime day) {
+    // Implementation example
+    return kEvents[day] ?? [];
+  }
 }
+
+class Event {
+  final String title;
+  final int id;
+
+  const Event(this.title, this.id);
+
+  @override
+  String toString() => title;
+}
+
+/*..addAll({
+    kToday: [
+      Event('Today\'s Event 1'),
+      Event('Today\'s Event 2'),
+    ],
+  });*/
+
+int getHashCode(DateTime key) {
+  return key.day * 1000000 + key.month * 10000 + key.year;
+}
+
+final kToday = DateTime.now();
+final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
+final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);

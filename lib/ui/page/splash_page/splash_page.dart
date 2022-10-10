@@ -9,7 +9,8 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ScreenUtil.removeSystemTransparent(context);
+     ScreenUtil.removeSystemTransparent(context);
+
     ///预缓存背景图片
     precacheImage(const AssetImage(R.assetsImagesLoginBackground), context);
     return const Scaffold(
