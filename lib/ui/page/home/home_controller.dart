@@ -98,7 +98,7 @@ class HomeController extends BaseGetPageController {
       MyDatabase.getInstance()!.updateToListCount(entity);
 
       if (entity.id != 4) {
-        ///全部列表为未完成的任务列表，如果删除的任务未完成，这此列表-1 否则不表
+        ///全部列表为未完成的任务列表，如果删除的任务未完成，则此列表-1 否则不表
         if (opera == 0) {
           systemList[3].count -= 1;
           MyDatabase.getInstance()!.updateToListCount(systemList[3]);
@@ -132,6 +132,9 @@ class HomeController extends BaseGetPageController {
           MyDatabase.getInstance()!.updateToListCount(systemList[1]);
         }
       }
+    }
+    if (entity.id! > 7) {
+      getSystemFromDatabase(2);
     }
     update();
   }
