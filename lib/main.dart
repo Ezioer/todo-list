@@ -1,8 +1,10 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:todos/app/app_theme.dart';
+import 'package:todos/color_schemes.g.dart';
 import 'package:todos/res/strings.dart';
 import 'package:todos/routes/routes.dart';
 import 'package:todos/ui/page/splash_page/splash_binding.dart';
@@ -22,35 +24,45 @@ const Set<PointerDeviceKind> _kTouchLikeDeviceTypes = <PointerDeviceKind>{
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Injection.init();
-  initializeDateFormatting().then((_) => runApp(GetMaterialApp(
-    scrollBehavior: const MaterialScrollBehavior()
-        .copyWith(scrollbars: true, dragDevices: _kTouchLikeDeviceTypes),
-    getPages: Routes.routePage,
-    debugShowCheckedModeBanner: false,
-    initialRoute: '/',
-    builder: (context, child) => Scaffold(
-      // Global GestureDetector that will dismiss the keyboard
-      body: GestureDetector(
-        onTap: () {
-          KeyboardUtils.hideKeyboard(context);
+  initializeDateFormatting().then((_) => runApp(DynamicColorBuilder(
+        builder: (lightDynamic, darkDynamic) {
+          return GetMaterialApp(
+            scrollBehavior: const MaterialScrollBehavior().copyWith(scrollbars: true, dragDevices: _kTouchLikeDeviceTypes),
+            getPages: Routes.routePage,
+            debugShowCheckedModeBanner: false,
+            initialRoute: '/',
+            builder: (context, child) => Scaffold(
+// Global GestureDetector that will dismiss the keyboard
+              body: GestureDetector(
+                onTap: () {
+                  KeyboardUtils.hideKeyboard(context);
+                },
+                child: child,
+              ),
+            ),
+
+            ///主题颜色
+// theme: Themes.light,
+            ///国际化支持-来源配置
+            translations: Messages(),
+            theme: ThemeData(
+              colorScheme: lightDynamic ?? lightColorScheme,
+              useMaterial3: true,
+            ),
+            darkTheme: ThemeData(
+              colorScheme: darkDynamic ?? darkColorScheme,
+              useMaterial3: true,
+            ),
+
+            ///国际化支持-默认语言
+            locale: LocaleOptions.getDefault(),
+
+            ///国际化支持-备用语言
+            fallbackLocale: const Locale('en', 'US'),
+            defaultTransition: Transition.rightToLeftWithFade,
+            initialBinding: SplashBinding(),
+            home: const SplashPage(),
+          );
         },
-        child: child,
-      ),
-    ),
-
-    ///主题颜色
-    theme: Themes.light,
-
-    ///国际化支持-来源配置
-    translations: Messages(),
-
-    ///国际化支持-默认语言
-    locale: LocaleOptions.getDefault(),
-
-    ///国际化支持-备用语言
-    fallbackLocale: const Locale('en', 'US'),
-    defaultTransition: Transition.rightToLeftWithFade,
-    initialBinding: SplashBinding(),
-    home: const SplashPage(),
-  )));
+      )));
 }

@@ -34,7 +34,6 @@ class ScreenUtil {
           systemNavigationBarColor: Colors.lightGreen,
           systemNavigationBarContrastEnforced: false);
       SystemChrome.setSystemUIOverlayStyle(_style);
-      // SystemChrome.setsy ([SystemUiOverlay.top]);
     }
   }
 }

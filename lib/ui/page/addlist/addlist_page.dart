@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
@@ -81,373 +82,373 @@ class AddListPage extends GetCommonView<AddListController> {
   @override
   Widget build(BuildContext context) {
     // showNewListDialog(context);
-    return Scaffold(
-      backgroundColor: ColorStyle.colorList[int.parse(controller.defaultBg)],
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            backgroundColor: ColorStyle.colorList[int.parse(controller.defaultBg)],
-            actions: [
-              PopupMenuButton(
-                position: PopupMenuPosition.under,
-                padding: EdgeInsets.all(4),
-                icon: Icon(Icons.sort),
-                itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                  PopupMenuItem(
-                    child: ListTile(
-                      leading: Icon(Icons.sort),
-                      title: Text('时间升序'),
-                      onTap: () {
-                        controller.sortList(1);
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  PopupMenuItem(
-                    child: ListTile(
-                      onTap: () {
-                        controller.sortList(2);
-                        Navigator.pop(context);
-                      },
-                      leading: Icon(Icons.sort),
-                      title: Text('时间降序'),
-                    ),
-                  ),
-                  PopupMenuItem(
-                    child: ListTile(
-                      onTap: () {
-                        controller.sortList(3);
-                        Navigator.pop(context);
-                      },
-                      leading: Icon(Icons.star),
-                      title: Text('重要性优先'),
-                    ),
-                  ),
-                ],
-              ),
-              IconButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                        context: context,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-                        builder: (context) {
-                          return Wrap(
-                            children: [
-                              Column(
-                                children: [
-                                  Container(
-                                    child: Text(
-                                      "选择主题",
-                                      style: TextStyle(fontWeight: FontWeight.w600),
-                                    ),
-                                    padding: EdgeInsets.all(10),
-                                  ),
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: ColorStyle.colorList.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          controller.changeBg(index);
-                                          Navigator.pop(context);
-                                        },
-                                        child: Container(
-                                          margin: EdgeInsets.only(top: 2),
-                                          width: 40,
-                                          height: 30,
-                                          decoration: BoxDecoration(color: ColorStyle.colorList[index], borderRadius: BorderRadius.circular(20)),
-                                        ),
-                                      );
-                                    },
-                                  )
-                                ],
-                              ),
-                            ],
-                          );
-                        });
-                  },
-                  icon: Icon(
-                    Icons.color_lens,
-                  )),
-              PopupMenuButton(
-                position: PopupMenuPosition.under,
-                padding: EdgeInsets.all(4),
-                icon: Icon(Icons.more_vert),
-                itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                  PopupMenuItem(
-                    child: ListTile(
-                      leading: Icon(Icons.edit),
-                      title: Text('重命名列表'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        _showDialog(2);
-                      },
-                    ),
-                  ),
-                  PopupMenuItem(
-                    child: ListTile(
-                      onTap: () {
-                        MyDatabase.getInstance()!.deleteTodoList(controller.typeEntity.id!);
-                        Get.find<HomeController>().getSystemFromDatabase(2);
-                        Navigator.pop(context);
-                        finishPage(Get.context!);
-                      },
-                      leading: Icon(Icons.delete),
-                      title: Text('删除'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-            centerTitle: true,
-            elevation: 0,
-            pinned: true,
-            snap: false,
-            floating: false,
-            expandedHeight: 120,
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.arrow_back)),
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: EdgeInsets.only(left: 16.0),
-              title: Text(
-                "${controller.titleController.text}",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-              child: Container(
-            margin: EdgeInsets.only(left: 16.0, top: 8.0),
-            child: Text(
-              "${controller.desController.text}",
-              style: TextStyle(fontWeight: FontWeight.w400),
-            ),
-          )),
-          SliverPadding(
-            padding: EdgeInsets.only(top: 10),
-            sliver: GetBuilder<AddListController>(
-                builder: (_) => SliverList(
-                        delegate: SliverChildBuilderDelegate(childCount: controller.todoList.length, (BuildContext context, int index) {
-                      return _MyListItem(controller.todoList[index]);
-                    }))),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return Container(
-                  padding: EdgeInsets.all(10),
-                  child: Wrap(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  icon: Icon(Icons.circle),
-                                  hintText: "在${controller.typeEntity.title}里添加任务",
-                                ),
-                                controller: controller.textController,
-                              ),
-                            ),
-                            IconButton(
-                                onPressed: () async {
-                                  TodoEntity entity = TodoEntity(
-                                      id: 0,
-                                      title: controller.textController.text,
-                                      des: "",
-                                      createTime: DateTime.now().millisecondsSinceEpoch.toString(),
-                                      createTimeYMD: "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}",
-                                      stopTime: controller.stopTime,
-                                      notiTime: controller.notiTime,
-                                      isMark: 0,
-                                      type: controller.typeEntity.id,
-                                      isMyDay: controller.typeEntity.id == 1 ? 1 : 0,
-                                      isFinish: 0);
-                                  int result = await MyDatabase.getInstance()!.saveOneTodo(entity);
-                                  if (result == -1) {
-                                    ToastUtils.show("不要添加相同任务哦");
-                                  } else {
-                                    entity.id = result;
-                                    controller.todoList.add(entity);
-                                    controller.update();
-                                    Get.find<HomeController>().updateCount(controller.typeEntity, 1, 0, 0, entity.type!);
-                                    Navigator.pop(context);
-                                  }
-                                },
-                                icon: Icon(Icons.send))
-                          ],
-                        ),
+    var mySystemTheme = SystemUiOverlayStyle.light.copyWith(systemNavigationBarColor: Theme.of(context).colorScheme.primaryContainer);
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: mySystemTheme,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              actions: [
+                PopupMenuButton(
+                  position: PopupMenuPosition.under,
+                  padding: EdgeInsets.all(4),
+                  icon: Icon(Icons.sort),
+                  itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                    PopupMenuItem(
+                      child: ListTile(
+                        leading: Icon(Icons.sort),
+                        title: Text('时间升序'),
+                        onTap: () {
+                          controller.sortList(1);
+                          Navigator.pop(context);
+                        },
                       ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            GetBuilder<AddListController>(
-                              builder: (_) => InputChip(
-                                backgroundColor: controller.isDeleteStopTime == 1 ? Colors.red : null,
-                                deleteIcon: null,
-                                onDeleted: controller.isDeleteStopTime == 1
-                                    ? () {
-                                        controller.changeIsDelete(0, "设置截至日期");
-                                      }
-                                    : null,
-                                avatar: Icon(Icons.date_range),
-                                label: Text("${controller.stopValue}"),
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      isDismissible: true,
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-                                      builder: (context) {
-                                        return Wrap(
-                                          children: [
-                                            ListTile(
-                                              leading: Icon(Icons.calendar_today_outlined),
-                                              title: Text('今天（${DateUtil.getWeeksFromInt(DateTime.now().weekday)}）'),
-                                              onTap: () {
-                                                controller.changeIsDelete(1, "今天 到期");
-                                                controller.stopTime = DateUtil.getDayLast(1);
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            ListTile(
-                                              leading: Icon(Icons.calendar_today_outlined),
-                                              title: Text('明天（${DateUtil.getWeeksFromInt(DateTime.now().add(Duration(days: 1)).weekday)}）'),
-                                              onTap: () {
-                                                controller.changeIsDelete(1, "明天 到期");
-                                                controller.stopTime = DateUtil.getDayLast(2);
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            ListTile(
-                                              leading: Icon(Icons.calendar_today_outlined),
-                                              title: Text('下周（星期日）'),
-                                              onTap: () {
-                                                controller.changeIsDelete(1, "下周 到期");
-                                                controller.stopTime = DateUtil.getDayLast(7);
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            ListTile(
-                                              leading: Icon(Icons.calendar_today_outlined),
-                                              title: Text('选择日期'),
-                                              onTap: () async {
-                                                final DateTime? newDate = await showDatePicker(
-                                                  context: context,
-                                                  initialDate: DateTime.now(),
-                                                  firstDate: DateTime(2017, 1),
-                                                  lastDate: DateTime(2025, 7),
-                                                  helpText: 'Select a date',
-                                                );
-                                                if (newDate != null) {
-                                                  controller.dateTime = newDate;
-                                                  controller.stopTime = newDate.add(Duration(days: 1)).millisecondsSinceEpoch;
-                                                  controller.changeIsDelete(1, "${newDate.year}-${newDate.month}-${newDate.day} 到期");
-                                                  Navigator.pop(context);
-                                                }
-                                              },
-                                            ),
-                                          ],
+                    ),
+                    PopupMenuItem(
+                      child: ListTile(
+                        onTap: () {
+                          controller.sortList(2);
+                          Navigator.pop(context);
+                        },
+                        leading: Icon(Icons.sort),
+                        title: Text('时间降序'),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      child: ListTile(
+                        onTap: () {
+                          controller.sortList(3);
+                          Navigator.pop(context);
+                        },
+                        leading: Icon(Icons.star),
+                        title: Text('重要性优先'),
+                      ),
+                    ),
+                  ],
+                ),
+                IconButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+                          builder: (context) {
+                            return Wrap(
+                              children: [
+                                Column(
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                        "选择主题",
+                                        style: TextStyle(fontWeight: FontWeight.w600),
+                                      ),
+                                      padding: EdgeInsets.all(10),
+                                    ),
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: ColorStyle.colorList.length,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        return InkWell(
+                                          onTap: () {
+                                            controller.changeBg(index);
+                                            Navigator.pop(context);
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.only(top: 2),
+                                            width: 40,
+                                            height: 30,
+                                            decoration: BoxDecoration(color: ColorStyle.colorList[index], borderRadius: BorderRadius.circular(20)),
+                                          ),
                                         );
-                                      });
-                                },
+                                      },
+                                    )
+                                  ],
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                    icon: Icon(
+                      Icons.color_lens,
+                    )),
+                PopupMenuButton(
+                  position: PopupMenuPosition.under,
+                  padding: EdgeInsets.all(4),
+                  icon: Icon(Icons.more_vert),
+                  itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                    PopupMenuItem(
+                      child: ListTile(
+                        leading: Icon(Icons.edit),
+                        title: Text('重命名列表'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          _showDialog(2);
+                        },
+                      ),
+                    ),
+                    PopupMenuItem(
+                      child: ListTile(
+                        onTap: () {
+                          MyDatabase.getInstance()!.deleteTodoList(controller.typeEntity.id!);
+                          Get.find<HomeController>().getSystemFromDatabase(2);
+                          Navigator.pop(context);
+                          finishPage(Get.context!);
+                        },
+                        leading: Icon(Icons.delete),
+                        title: Text('删除'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+              centerTitle: true,
+              elevation: 0,
+              pinned: true,
+              snap: false,
+              floating: false,
+              expandedHeight: 120,
+              leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.arrow_back)),
+              flexibleSpace: FlexibleSpaceBar(
+                titlePadding: EdgeInsets.only(left: 16.0),
+                title: Text(
+                  "${controller.titleController.text}",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+                child: Container(
+              margin: EdgeInsets.only(left: 16.0, top: 8.0),
+              child: Text(
+                "${controller.desController.text}",
+                style: TextStyle(fontWeight: FontWeight.w400),
+              ),
+            )),
+            SliverPadding(
+              padding: EdgeInsets.only(top: 10),
+              sliver: GetBuilder<AddListController>(
+                  builder: (_) => SliverList(
+                          delegate: SliverChildBuilderDelegate(childCount: controller.todoList.length, (BuildContext context, int index) {
+                        return _MyListItem(controller.todoList[index]);
+                      }))),
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return Container(
+                    padding: EdgeInsets.all(10),
+                    child: Wrap(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 10),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    icon: Icon(Icons.circle),
+                                    hintText: "在${controller.typeEntity.title}里添加任务",
+                                  ),
+                                  controller: controller.textController,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            GetBuilder<AddListController>(
-                              builder: (_) => InputChip(
-                                backgroundColor: controller.isDeleteNoti == 1 ? Colors.red : null,
-                                deleteIcon: null,
-                                onDeleted: controller.isDeleteNoti == 1
-                                    ? () {
-                                        controller.changeIsNoti(0, "提醒我");
-                                      }
-                                    : null,
-                                avatar: Icon(Icons.notifications_active),
-                                label: Text("${controller.notiValue}"),
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      isDismissible: true,
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-                                      builder: (context) {
-                                        return Wrap(
-                                          children: [
-                                            ListTile(
-                                              leading: Icon(Icons.access_time),
-                                              title: Text('今天(19:00)'),
-                                              onTap: () {
-                                                controller.changeIsNoti(1, "今天(19:00)提醒我");
-                                                controller.notiTime = DateUtil.getNotiLast(1);
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            ListTile(
-                                              leading: Icon(Icons.access_time),
-                                              title: Text('明天(19:00)'),
-                                              onTap: () {
-                                                controller.changeIsNoti(1, "明天(19:00)提醒我");
-                                                controller.notiTime = DateUtil.getNotiLast(2);
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            ListTile(
-                                              leading: Icon(Icons.access_time),
-                                              title: Text('下周天(19:00)'),
-                                              onTap: () {
-                                                controller.changeIsNoti(1, "下周天(19:00)提醒我");
-                                                controller.notiTime = DateUtil.getNotiLast(7);
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            ListTile(
-                                              leading: Icon(Icons.access_time),
-                                              title: Text('选择日期'),
-                                              onTap: () async {
-                                                final DateTime? newDate = await showDatePicker(
-                                                  context: context,
-                                                  initialDate: DateTime.now(),
-                                                  firstDate: DateTime(2017, 1),
-                                                  lastDate: DateTime(2025, 7),
-                                                  helpText: '选择日期',
-                                                );
-                                                if (newDate != null) {
-                                                  controller.dateTime = newDate;
-                                                  controller.notiTime = newDate
-                                                      .subtract(Duration(hours: 5))
-                                                      .millisecondsSinceEpoch
-                                                      .toString();
-                                                  controller.changeIsNoti(1, "${newDate.year}-${newDate.month}-${newDate.day}(19:00)提醒我");
-                                                  Navigator.pop(context);
-                                                }
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      });
-                                },
-                              ),
-                            )
-                          ],
+                              IconButton(
+                                  onPressed: () async {
+                                    TodoEntity entity = TodoEntity(
+                                        id: 0,
+                                        title: controller.textController.text,
+                                        des: "",
+                                        createTime: DateTime.now().millisecondsSinceEpoch.toString(),
+                                        createTimeYMD: "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}",
+                                        stopTime: controller.stopTime,
+                                        notiTime: controller.notiTime,
+                                        isMark: 0,
+                                        type: controller.typeEntity.id,
+                                        isMyDay: controller.typeEntity.id == 1 ? 1 : 0,
+                                        isFinish: 0);
+                                    int result = await MyDatabase.getInstance()!.saveOneTodo(entity);
+                                    if (result == -1) {
+                                      ToastUtils.show("不要添加相同任务哦");
+                                    } else {
+                                      entity.id = result;
+                                      controller.todoList.add(entity);
+                                      controller.update();
+                                      Get.find<HomeController>().updateCount(controller.typeEntity, 1, 0, 0, entity.type!);
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  icon: Icon(Icons.send))
+                            ],
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-                );
-              });
-        },
-        child: Icon(Icons.add),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              GetBuilder<AddListController>(
+                                builder: (_) => InputChip(
+                                  backgroundColor: controller.isDeleteStopTime == 1 ? Colors.red : null,
+                                  deleteIcon: null,
+                                  onDeleted: controller.isDeleteStopTime == 1
+                                      ? () {
+                                          controller.changeIsDelete(0, "设置截至日期");
+                                        }
+                                      : null,
+                                  avatar: Icon(Icons.date_range),
+                                  label: Text("${controller.stopValue}"),
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        isDismissible: true,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+                                        builder: (context) {
+                                          return Wrap(
+                                            children: [
+                                              ListTile(
+                                                leading: Icon(Icons.calendar_today_outlined),
+                                                title: Text('今天（${DateUtil.getWeeksFromInt(DateTime.now().weekday)}）'),
+                                                onTap: () {
+                                                  controller.changeIsDelete(1, "今天 到期");
+                                                  controller.stopTime = DateUtil.getDayLast(1);
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                leading: Icon(Icons.calendar_today_outlined),
+                                                title: Text('明天（${DateUtil.getWeeksFromInt(DateTime.now().add(Duration(days: 1)).weekday)}）'),
+                                                onTap: () {
+                                                  controller.changeIsDelete(1, "明天 到期");
+                                                  controller.stopTime = DateUtil.getDayLast(2);
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                leading: Icon(Icons.calendar_today_outlined),
+                                                title: Text('下周（星期日）'),
+                                                onTap: () {
+                                                  controller.changeIsDelete(1, "下周 到期");
+                                                  controller.stopTime = DateUtil.getDayLast(7);
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                leading: Icon(Icons.calendar_today_outlined),
+                                                title: Text('选择日期'),
+                                                onTap: () async {
+                                                  final DateTime? newDate = await showDatePicker(
+                                                    context: context,
+                                                    initialDate: DateTime.now(),
+                                                    firstDate: DateTime(2017, 1),
+                                                    lastDate: DateTime(2025, 7),
+                                                    helpText: 'Select a date',
+                                                  );
+                                                  if (newDate != null) {
+                                                    controller.dateTime = newDate;
+                                                    controller.stopTime = newDate.add(Duration(days: 1)).millisecondsSinceEpoch;
+                                                    controller.changeIsDelete(1, "${newDate.year}-${newDate.month}-${newDate.day} 到期");
+                                                    Navigator.pop(context);
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              GetBuilder<AddListController>(
+                                builder: (_) => InputChip(
+                                  backgroundColor: controller.isDeleteNoti == 1 ? Colors.red : null,
+                                  deleteIcon: null,
+                                  onDeleted: controller.isDeleteNoti == 1
+                                      ? () {
+                                          controller.changeIsNoti(0, "提醒我");
+                                        }
+                                      : null,
+                                  avatar: Icon(Icons.notifications_active),
+                                  label: Text("${controller.notiValue}"),
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        isDismissible: true,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+                                        builder: (context) {
+                                          return Wrap(
+                                            children: [
+                                              ListTile(
+                                                leading: Icon(Icons.access_time),
+                                                title: Text('今天(19:00)'),
+                                                onTap: () {
+                                                  controller.changeIsNoti(1, "今天(19:00)提醒我");
+                                                  controller.notiTime = DateUtil.getNotiLast(1);
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                leading: Icon(Icons.access_time),
+                                                title: Text('明天(19:00)'),
+                                                onTap: () {
+                                                  controller.changeIsNoti(1, "明天(19:00)提醒我");
+                                                  controller.notiTime = DateUtil.getNotiLast(2);
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                leading: Icon(Icons.access_time),
+                                                title: Text('下周天(19:00)'),
+                                                onTap: () {
+                                                  controller.changeIsNoti(1, "下周天(19:00)提醒我");
+                                                  controller.notiTime = DateUtil.getNotiLast(7);
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                leading: Icon(Icons.access_time),
+                                                title: Text('选择日期'),
+                                                onTap: () async {
+                                                  final DateTime? newDate = await showDatePicker(
+                                                    context: context,
+                                                    initialDate: DateTime.now(),
+                                                    firstDate: DateTime(2017, 1),
+                                                    lastDate: DateTime(2025, 7),
+                                                    helpText: '选择日期',
+                                                  );
+                                                  if (newDate != null) {
+                                                    controller.dateTime = newDate;
+                                                    controller.notiTime = newDate.subtract(Duration(hours: 5)).millisecondsSinceEpoch.toString();
+                                                    controller.changeIsNoti(1, "${newDate.year}-${newDate.month}-${newDate.day}(19:00)提醒我");
+                                                    Navigator.pop(context);
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                });
+          },
+          child: Icon(Icons.add),
+        ),
       ),
     );
   }
