@@ -81,7 +81,6 @@ class AddListPage extends GetCommonView<AddListController> {
 
   @override
   Widget build(BuildContext context) {
-    // showNewListDialog(context);
     var mySystemTheme = SystemUiOverlayStyle.light.copyWith(systemNavigationBarColor: Theme.of(context).colorScheme.primaryContainer);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: mySystemTheme,
@@ -90,6 +89,7 @@ class AddListPage extends GetCommonView<AddListController> {
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
               actions: [
                 PopupMenuButton(
                   position: PopupMenuPosition.under,
@@ -533,7 +533,7 @@ class _MyListItem extends StatelessWidget {
           // A SlidableAction can have an icon and/or a label.
           SlidableAction(
             autoClose: false,
-            backgroundColor: Color(0xFFFE4A49),
+            backgroundColor: Theme.of(context).colorScheme.primary,
             foregroundColor: Colors.white,
             icon: Icons.delete,
             label: 'Delete',
@@ -573,7 +573,7 @@ class _MyListItem extends StatelessWidget {
                       Get.find<ListDetailController>().update();
                     },
                     value: data.isFinish == 1,
-                    activeColor: Color(0xFF6200EE),
+                    activeColor: Theme.of(context).colorScheme.primary,
                   ),
                   Expanded(
                       child: Column(
@@ -608,7 +608,7 @@ class _MyListItem extends StatelessWidget {
                       Get.find<ListDetailController>().update();
                     },
                     icon: Icon(data.isMark == 1 ? Icons.star : Icons.star_border),
-                    color: data.isMark == 1 ? Colors.red : null,
+                    color: data.isMark == 1 ? Theme.of(context).colorScheme.primary : null,
                   )
                 ],
               )),

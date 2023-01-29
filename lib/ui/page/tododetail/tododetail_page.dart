@@ -69,7 +69,7 @@ class TodoDetailPage extends GetCommonView<TodoDetailController> {
                           Get.find<ListDetailController>().update();
                         },
                         value: controller.data.isFinish == 1,
-                        activeColor: Color(0xFF6200EE),
+                        activeColor: Theme.of(context).colorScheme.primary,
                       ),
                       Expanded(
                         child: TextField(
@@ -96,7 +96,7 @@ class TodoDetailPage extends GetCommonView<TodoDetailController> {
                           Get.find<ListDetailController>().update();
                         },
                         icon: Icon(controller.data.isMark == 1 ? Icons.star : Icons.star_border),
-                        color: controller.data.isMark == 1 ? Colors.red : null,
+                        color: controller.data.isMark == 1 ? Theme.of(context).colorScheme.primary : null,
                       )
                     ],
                   )),

@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -678,8 +676,8 @@ class _MyListItem extends StatelessWidget {
         children: [
           // A SlidableAction can have an icon and/or a label.
           SlidableAction(
-            autoClose: false,
-            backgroundColor: Color(0xFFFE4A49),
+            autoClose: true,
+            backgroundColor: Theme.of(context).colorScheme.primary,
             foregroundColor: Colors.white,
             icon: Icons.delete,
             label: 'Delete',
@@ -719,7 +717,7 @@ class _MyListItem extends StatelessWidget {
                       Get.find<ListDetailController>().update();
                     },
                     value: data.isFinish == 1,
-                    activeColor: ColorScheme.light().primary,
+                    activeColor: Theme.of(context).colorScheme.primary,
                   ),
                   Expanded(
                       child: Column(
@@ -768,7 +766,7 @@ class _MyListItem extends StatelessWidget {
                       Get.find<ListDetailController>().update();
                     },
                     icon: Icon(data.isMark == 1 ? Icons.star : Icons.star_border),
-                    color: data.isMark == 1 ? ColorScheme.light().primary : null,
+                    color: data.isMark == 1 ? Theme.of(context).colorScheme.primary : null,
                   )
                 ],
               )),

@@ -85,6 +85,7 @@ dependencies:
   table_calendar: ^3.0.7
   dynamic_color: ^1.5.4
   #  dynamic_color: ^1.5.3
+  file_selector: ^0.9.1
   sqflite:
   path:
 dev_dependencies:
