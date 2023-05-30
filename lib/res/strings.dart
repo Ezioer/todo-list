@@ -72,7 +72,7 @@ class Messages extends Translations{
           StringStyles.refreshHeaderSuccess: "刷新成功",
         },
     'zh_HK' : {
-          StringStyles.appName: '古诗词',
+          StringStyles.appName: 'todo list',
           StringStyles.loading: '加載中...',
           StringStyles.settingTitle: "設置",
           StringStyles.settingLanguage: "語言",
@@ -100,7 +100,7 @@ class Messages extends Translations{
           StringStyles.refreshHeaderSuccess: "刷新成功",
         },
     'en_US' : {
-          StringStyles.appName: 'ClassicalPoetry',
+          StringStyles.appName: 'todo list',
           StringStyles.loading: 'Loading...',
           StringStyles.settingTitle: "Setting",
           StringStyles.settingLanguage: "Language",
