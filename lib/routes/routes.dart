@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:todos/ui/page/addlist/addlist_binding.dart';
 import 'package:todos/ui/page/addlist/addlist_page.dart';
+import 'package:todos/ui/page/journey/journey_binding.dart';
+import 'package:todos/ui/page/journey/journey_page.dart';
 import 'package:todos/ui/page/listdetail/listdetail_binding.dart';
 import 'package:todos/ui/page/listdetail/listdetail_page.dart';
 import 'package:todos/ui/page/search/search_binding.dart';
@@ -25,6 +27,7 @@ abstract class Routes {
   static const String listdetailPage = '/listdetail';
   static const String searchPage = '/search';
   static const String addList = '/addlist';
+  static const String journey = '/journey';
 
   static const String about = '/about';
   static const String commondetail = '/commondetail';
@@ -52,10 +55,13 @@ abstract class Routes {
         name: addList,
         page: () => const AddListPage(),
         binding: AddListBinding()),
-
     GetPage(
         name: commondetail,
         page: () => const TodoDetailPage(),
         binding: TodoDetailBinding()),
+    GetPage(
+        name: journey,
+        page: () => const JourneyPage(),
+        binding: JourneyBinding()),
   ];
 }

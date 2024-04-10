@@ -1,8 +1,12 @@
 buildscript {
     ext.kotlin_version = '1.6.10'
     repositories {
-        google()
-        mavenCentral()
+        google() {
+            allowInsecureProtocol = true
+        }
+        mavenCentral() {
+            allowInsecureProtocol = true
+        }
     }
 
     dependencies {
@@ -13,8 +17,11 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
+        google() {
+            allowInsecureProtocol = true
+        }
         mavenCentral()
+                { allowInsecureProtocol = true }
     }
 }
 
@@ -26,6 +33,6 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
-task clean(type: Delete) {
+tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }

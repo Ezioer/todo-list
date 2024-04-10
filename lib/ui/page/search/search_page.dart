@@ -14,7 +14,7 @@ import '../../../routes/routes.dart';
 import '../../../util/date_util.dart';
 import '../home/home_controller.dart';
 
-class SearchPage extends GetCommonView<SearchController> {
+class SearchPage extends GetCommonView<SearchReController> {
   const SearchPage({Key? key}) : super(key: key);
 
   @override

@@ -44,7 +44,10 @@ class HomePage extends GetCommonView<HomeController> {
                         Icons.search,
                       )),
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        //
+                        Get.toNamed(Routes.journey);
+                      },
                       icon: Icon(
                         Icons.settings,
                       )),

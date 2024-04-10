@@ -7,15 +7,15 @@ import 'package:get/get.dart';
 
 import '../../../db/model/todolist_entity.dart';
 import '../../../widget/pull_smart_refresher.dart';
-class SearchController extends BaseGetPageController {
-
+class SearchReController extends BaseGetPageController {
   List<TodoEntity> list = [];
+
   ///输入框文本控制器
   TextEditingController textController = TextEditingController(text: "");
+
   @override
   void onInit() {
     super.onInit();
-
   }
 
   void searchResult(String key) async{
