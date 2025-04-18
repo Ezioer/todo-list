@@ -69,7 +69,7 @@ class IconTitleWidget extends StatelessWidget {
                 left: 36,
                 child: Text(
                   text,
-                  style: Get.theme.textTheme.headline4,
+                  style: Get.theme.textTheme.headlineMedium,
                 ),
               ),
               Positioned(

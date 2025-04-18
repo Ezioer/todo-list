@@ -20,9 +20,9 @@ class Themes {
       scaffoldBackgroundColor: Colors.white,
       brightness: Brightness.light,
       textTheme: const TextTheme(
-          headline6: TextStyle(color: Colors.red, fontSize: 16),
-          headline4: TextStyle(color: Colors.black54, fontSize: 18),
-          headline2: TextStyle(color: Colors.black, fontSize: 22)),
+          headlineSmall: TextStyle(color: Colors.red, fontSize: 16),
+          headlineMedium: TextStyle(color: Colors.black54, fontSize: 18),
+          headlineLarge: TextStyle(color: Colors.black, fontSize: 22)),
       appBarTheme: const AppBarTheme(centerTitle: true, iconTheme: IconThemeData(color: Colors.black54)),
       pageTransitionsTheme: const PageTransitionsTheme(builders: <TargetPlatform, PageTransitionsBuilder>{
         TargetPlatform.android: ZoomPageTransitionsBuilder(),
@@ -37,9 +37,9 @@ class Themes {
     scaffoldBackgroundColor: Colors.blueGrey,
     brightness: Brightness.dark,
     textTheme: const TextTheme(
-        headline6: TextStyle(color: ColorStyle.color_d9a40e, fontSize: 16),
-        headline4: TextStyle(color: Colors.white70, fontSize: 18),
-        headline2: TextStyle(color: Colors.white, fontSize: 22)),
+        headlineSmall: TextStyle(color: ColorStyle.color_d9a40e, fontSize: 16),
+        headlineMedium: TextStyle(color: Colors.white70, fontSize: 18),
+        headlineLarge: TextStyle(color: Colors.white, fontSize: 22)),
     appBarTheme: AppBarTheme(backgroundColor: Colors.brown),
   );
 }

@@ -20,7 +20,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.18.0-271.7.beta <3.0.0'
+  sdk: '>=3.4.0-282.1.beta <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -35,13 +35,13 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.6
   flutter_lints: ^2.0.0
 
   # rxdart https://pub.flutter-io.cn/packages/rxdart
   rxdart: ^0.27.1
   #GetX状态管理框架 https://pub.flutter-io.cn/packages/get
-  get: 4.6.5
+  get: ^4.6.6
   #toast https://pub.flutter-io.cn/packages/fluttertoast
   fluttertoast: ^8.0.8
   # 网络请求库 https://github.com/flutterchina/dio
@@ -53,7 +53,7 @@ dependencies:
   # lottie动画 https://pub.flutter-io.cn/packages/flutter_lottie
   lottie: ^1.1.0
   # SP键值对存储 https://pub.flutter-io.cn/packages/shared_preferences
-  shared_preferences: ^2.0.6
+  shared_preferences: ^2.2.2
   #读取相册
   image_picker: 0.8.3+3
   # https://github.com/flutter/plugins/tree/master/packages/url_launcher
@@ -75,7 +75,7 @@ dependencies:
   flutter_material_color_picker: ^1.1.0+2
   moor: ^4.3.2
   sqlite3_flutter_libs: ^0.5.0
-  flutter_slidable: ^2.0.0
+  flutter_slidable: ^3.1.0
   home_widget: ^0.1.6
   workmanager: ^0.5.0
   collection: ^1.14.13
